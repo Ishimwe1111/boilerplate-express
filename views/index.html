@@ -1,57 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POST Request Test</title>
+  <meta charset="UTF-8">
+  <title>File Metadata Microservice</title>
 </head>
 <body>
-    <h1>Test POST Request</h1>
-    
-    <form action="/name" method="POST">
-        <div>
-            <label for="first">First Name:</label>
-            <input type="text" id="first" name="first" required>
-        </div>
-        <br>
-        <div>
-            <label for="last">Last Name:</label>
-            <input type="text" id="last" name="last" required>
-        </div>
-        <br>
-        <button type="submit">Submit</button>
-    </form>
-    
-    <div id="result"></div>
-    
-    <script>
-        const form = document.querySelector('form');
-        const resultDiv = document.getElementById('result');
-        
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(form);
-            const data = {
-                first: formData.get('first'),
-                last: formData.get('last')
-            };
-            
-            try {
-                const response = await fetch('/name', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(data)
-                });
-                
-                const result = await response.json();
-                resultDiv.innerHTML = `<h3>Response:</h3><pre>${JSON.stringify(result, null, 2)}</pre>`;
-            } catch (error) {
-                resultDiv.innerHTML = `<h3>Error:</h3><pre>${error.message}</pre>`;
-            }
-        });
-    </script>
+
+<h1>File Metadata Microservice</h1>
+
+<form action="/api/fileanalyse"
+      method="POST"
+      enctype="multipart/form-data">
+
+  <input
+    type="file"
+    name="upfile"
+    required>
+
+  <button type="submit">
+    Upload
+  </button>
+
+</form>
+
 </body>
 </html>

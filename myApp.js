@@ -1,23 +1,57 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const path = require('path');
 
 const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Body parser middleware to handle form data
+/*
+====================================
+MIDDLEWARE
+====================================
+*/
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Serve static files and the HTML form
-app.get('/', function(req, res) {
+/*
+====================================
+HOME PAGE
+====================================
+*/
+
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// POST route to handle form submission
-app.post('/name', function(req, res) {
-  const firstName = req.body.first;
-  const lastName = req.body.last;
-  
-  res.json({name: firstName + ' ' + lastName});
+/*
+====================================
+POST ROUTE
+====================================
+*/
+
+app.post('/name', (req, res) => {
+  const first = req.body.first;
+  const last = req.body.last;
+
+  res.json({
+    name: `${first} ${last}`
+  });
 });
+
+app.post('/api/fileanalyse', upload.single('upfile'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+
+  const { originalname: name, mimetype: type, size } = req.file;
+  res.json({ name, type, size });
+});
+
+/*
+====================================
+EXPORT
+====================================
+*/
 
 module.exports = app;
